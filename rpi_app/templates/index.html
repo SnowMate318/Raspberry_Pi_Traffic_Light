@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LED Control and Video Streaming</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>LED Control</h1>
+    <button id="ledOnBtn">LED ON</button>
+    <button id="ledOffBtn">LED OFF</button>
+
+    <h1>Video Streaming</h1>
+    <img id="videoStream" src="" width="640" height="480" />
+
+    <script>
+      $(document).ready(function () {
+        // LED Control
+        $("#ledOnBtn").click(function () {
+          controlLED("on");
+        });
+
+        $("#ledOffBtn").click(function () {
+          controlLED("off");
+        });
+
+        function controlLED(status) {
+          $.ajax({
+            url: "/led_control/",
+            type: "POST",
+            data: { led_status: status },
+            success: function (response) {
+              console.log(response.message);
+            },
+            error: function (xhr, status, error) {
+              console.log(error);
+            },
+          });
+        }
+
+        // Video Streaming
+        function startVideoStream() {
+          var video = document.getElementById("videoStream");
+          video.src = "/video_feed/";
+          video.onload = function () {
+            this.play();
+          };
+        }
+
+        startVideoStream();
+      });
+    </script>
+  </body>
+</html>
